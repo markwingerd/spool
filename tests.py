@@ -20,5 +20,13 @@ class TestSpool(unittest.TestCase):
         self.assertEqual(merc.pool,0)
         self.assertEqual(merc.this_weeks_pool,0)
 
+    def test_pool_reduction(self):
+        """Tests how point reduction works."""
+        gmech = Gmech()
+        self.assertEqual(gmech.get_point_reduction(hours=0, this_weeks_pool=100),20)
+        self.assertEqual(gmech.get_point_reduction(hours=2.5, this_weeks_pool=100),10)
+        self.assertEqual(gmech.get_point_reduction(hours=5, this_weeks_pool=100),0)
+        self.assertEqual(gmech.get_point_reduction(hours=200, this_weeks_pool=100),0)
+
 if __name__ == '__main__':
     unittest.main()

@@ -10,7 +10,15 @@ class Gmech:
         self.inactivity_drop = inactivity_drop
     # Get weekly pool.
     # Get match points based on match number and total pool.
-    # Get point reduction for low weekly hours.
+
+    def get_point_reduction(self, hours, this_weeks_pool):
+        """Returns points that will be subtracted from a weekly pool."""
+        if hours < self.inactivity_time:
+            slope = -1 * self.inactivity_drop / self.inactivity_time
+            penalty = slope * hours + self.inactivity_drop
+            return this_weeks_pool * penalty
+        else:
+            return 0
 
 if __name__ == '__main__':
     # Used for testing scenerios/flow
