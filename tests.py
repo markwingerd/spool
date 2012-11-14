@@ -15,7 +15,8 @@ class TestSpool(unittest.TestCase):
 
     def test_merc_init(self):
         """Tests the internal variables."""
-        merc = Merc()
+        gmech = Gmech()
+        merc = Merc(gmech)
         self.assertEqual(merc.points,0)
         self.assertEqual(merc.pool,0)
         self.assertEqual(merc.this_weeks_pool,0)
@@ -35,6 +36,22 @@ class TestSpool(unittest.TestCase):
         self.assertEqual(gmech.get_match_points_no_history(10,300000),2800)
         self.assertEqual(gmech.get_match_points_no_history(100,300000),1000)
         self.assertEqual(gmech.get_match_points_no_history(101,300000),1000)
+
+    def test_history(self):
+        """Tests that a Merc history works."""
+        gmech = Gmech()
+        merc = Merc(gmech)
+        self.assertEqual(merc.get_history(0),0)
+        self.assertEqual(merc.get_history(20),20)
+        self.assertEqual(merc.get_history(30),25)
+        self.assertEqual(merc.get_history(10),20)
+        self.assertEqual(merc.get_history(20),20)
+        self.assertEqual(merc.get_history(0),10)
+        self.assertEqual(merc.get_history(0),20/float(3))
+        self.assertEqual(merc.get_history(0),0)
+        self.assertEqual(merc.get_history(10),10)
+        self.assertEqual(merc.get_history(20),15)
+        self.assertEqual(merc.get_history(0),10)
 
 if __name__ == '__main__':
     unittest.main()
