@@ -2,7 +2,9 @@ import math
 
 class Gmech:
     """"""
-    def __init__(self, weekly_pool=300000, matches_per_hour=3, inactivity_time=5, inactivity_drop=0.20, points_min=1000, max_matches=100, weeks_in_history=3):
+    def __init__(self, weekly_pool=300000, matches_per_hour=3,
+                 inactivity_time=5, inactivity_drop=0.20, points_min=1000,
+                 max_matches=100, weeks_in_history=3):
         """Init for all mech variables."""
         self.weekly_pool = weekly_pool
         self.matches_per_hour = matches_per_hour
@@ -29,7 +31,6 @@ class Gmech:
         points_max = round(pool/self.max_matches)
         slope = -1 * ((points_max-self.points_min)/self.max_matches)
         output = round((slope * match_number) + points_max)
-
         # Slope should not be positive. Returning min_points is sufficent.
         # If output is too low, return the minimum points gained.
         if (slope > 0) or (output < self.points_min):
