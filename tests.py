@@ -28,7 +28,7 @@ class TestSpool(unittest.TestCase):
         self.assertEqual(gmech.get_point_reduction(hours=5, this_weeks_pool=100),0)
         self.assertEqual(gmech.get_point_reduction(hours=200, this_weeks_pool=100),0)
 
-    def test_first_week_points(self):
+    def test_match_points_no_history(self):
         """Tests the point distribution for a mercs first week."""
         gmech = Gmech()
         self.assertEqual(gmech.get_match_points_no_history(0,300000),3000)
