@@ -24,7 +24,7 @@ class Gmech:
         else:
             return 0
 
-    def get_match_points_no_history(self,match_number, pool):
+    def get_match_points_no_history(self, match_number, pool):
         """Returns the points based on the match_number if no history has
         been established."""
         # Establish Equation
@@ -37,9 +37,33 @@ class Gmech:
             return self.points_min
         return output
 
+    def get_match_points(self, match_number, history, pool):
+        """Returns the points for the match_number. Warning: Equations still 
+        need to be studied."""
+        unknown=1.5 # I don't know what this does but its good.
+        output = 0
+        slope = 0
+        assumed_matches = history * unknown * self.matches_per_hour
+        # Within the assumed_matches, return a standard point value. Beyond
+        # assumed_matches, return a deteriorating point value.
+        if match_number < assumed_matches:
+            output = round(pool / (unknown*assumed_matches-match_number))
+        else:
+            points_max = round(pool/assumed_matches*2)
+            slope = -1 * ((points_max-self.points_min)/assumed_matches)
+            output = round(slope * (match_number-assumed_matches)) + points_max
+        # Slope should not be positive. Returning min_points is sufficent.
+        # If output is too low, return the minimum points gained.
+        if (slope > 0) or (output < self.points_min):
+            return self.points_min
+        return output
+
 
 if __name__ == '__main__':
     # Used for testing scenerios/flow
     gmech = Gmech()
-    for i in range(0,200,25):
-        print i, gmech.get_match_points_no_history(i,300000)
+    pool = 400000
+    for i in range(100):
+        points = gmech.get_match_points(i,10,pool)
+        pool -= points
+        print '%3i - Points: %4i - Pool: %6i' % (i, points, pool)

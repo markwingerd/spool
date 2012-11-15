@@ -35,11 +35,20 @@ class TestSpool(unittest.TestCase):
         self.assertEqual(self.gmech.get_point_reduction(hours=200, this_weeks_pool=100),0)
 
     def test_match_points_no_history(self):
-        """Tests the point distribution for a mercs first week."""
+        """Tests the point distribution for merc with no history."""
         self.assertEqual(self.gmech.get_match_points_no_history(0,300000),3000)
         self.assertEqual(self.gmech.get_match_points_no_history(10,300000),2800)
         self.assertEqual(self.gmech.get_match_points_no_history(100,300000),1000)
         self.assertEqual(self.gmech.get_match_points_no_history(101,300000),1000)
+
+    def test_match_points_with_history(self):
+        """Tests the point distribution for merc with a history."""
+        self.assertEqual(self.gmech.get_match_points(0, 10, 400000), 5926)
+        self.assertEqual(self.gmech.get_match_points(1, 10, 394074), 5926)
+        self.assertEqual(self.gmech.get_match_points(45, 10, 133330), 5926)
+        self.assertEqual(self.gmech.get_match_points(46, 10, 127404), 5558)
+        self.assertEqual(self.gmech.get_match_points(89, 10, 29241), 1007)
+        self.assertEqual(self.gmech.get_match_points(90, 10, 28234), 1000)
 
     def test_history(self):
         """Tests that a Merc history works."""
@@ -54,6 +63,7 @@ class TestSpool(unittest.TestCase):
         self.assertEqual(self.merc.get_history(10),10)
         self.assertEqual(self.merc.get_history(20),15)
         self.assertEqual(self.merc.get_history(0),10)
+
 
 if __name__ == '__main__':
     unittest.main()
