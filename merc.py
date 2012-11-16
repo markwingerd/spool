@@ -6,8 +6,8 @@ class Merc:
         """Initialize Merc variables."""
         self.gmech = gmech
         self.points = 0
-        self.pool = 0
         self.this_weeks_pool = 0
+        self.pool = 0
         self.history = []
 
     def get_history(self, hours):
@@ -24,9 +24,89 @@ class Merc:
         # Find the average hours in history.
         return sum(self.history)/float(len(self.history))
 
-    # Method for dealing with reduced points for inactivity.
+    def week(self, hours_played):
+        """Apply matches for a week."""
+        # Initialize this week.
+        matches_played = hours_played * gmech.matches_per_hour
+        average_points = 0 ###
+        self.this_weeks_pool = self.gmech.weekly_pool
+        # Get points for each match. Choose correct function based on history.
+        if self.history:
+            for i in range(matches_played):
+                match_points = self.gmech.get_match_points(i,hours_played,self.pool+self.this_weeks_pool)
+                self.points += match_points
+                self.this_weeks_pool -= match_points
+                average_points += match_points ###
+            average_points /= matches_played ###
+        else:
+            for i in range(matches_played):
+                match_points = self.gmech.get_match_points_no_history(i,self.pool+self.this_weeks_pool)
+                self.points += match_points
+                self.this_weeks_pool -= match_points
+                average_points += match_points ###
+            average_points /= matches_played ###
+        # Finalize the week.
+        self.get_history(hours_played)
+        self.this_weeks_pool -= self.gmech.get_point_reduction(hours_played, self.pool+self.this_weeks_pool)
+        self.pool += self.this_weeks_pool
+        print 'Matches played: %3i - Points gained: %10.1f - Pool left: %10.1f - Average points: %7.1f' % (matches_played, self.points, self.pool, average_points)
 
 
 if __name__ == '__main__':
-    gmech = Gmech()
-    merc = Merc(gmech)
+    gmech = Gmech(weekly_pool=500000, inactivity_time=15,inactivity_drop=0.40)
+    print 'Addicted Merc'
+    average_merc = Merc(gmech)
+    average_merc.week(28)
+    average_merc.week(34)
+    average_merc.week(31)
+    average_merc.week(34)
+    average_merc.week(20)
+    average_merc.week(23)
+    average_merc.week(19)
+    average_merc.week(37)
+    average_merc.week(38)
+    average_merc.week(35)
+    average_merc.week(39)
+    average_merc.week(52)
+    print 'Average Merc'
+    average_merc = Merc(gmech)
+    average_merc.week(12)
+    average_merc.week(14)
+    average_merc.week(11)
+    average_merc.week(9)
+    average_merc.week(13)
+    average_merc.week(12)
+    average_merc.week(12)
+    average_merc.week(8)
+    average_merc.week(10)
+    average_merc.week(10)
+    average_merc.week(14)
+    average_merc.week(12)
+    print 'Casual Merc'
+    average_merc = Merc(gmech)
+    average_merc.week(3)
+    average_merc.week(4)
+    average_merc.week(2)
+    average_merc.week(4)
+    average_merc.week(1)
+    average_merc.week(1)
+    average_merc.week(1)
+    average_merc.week(2)
+    average_merc.week(4)
+    average_merc.week(2)
+    average_merc.week(3)
+    average_merc.week(2)
+    print 'Inactive Merc'
+    average_merc = Merc(gmech)
+    average_merc.week(1)
+    average_merc.week(1)
+    average_merc.week(1)
+    average_merc.week(1)
+    average_merc.week(1)
+    average_merc.week(1)
+    average_merc.week(1)
+    average_merc.week(1)
+    average_merc.week(1)
+    average_merc.week(1)
+    average_merc.week(1)
+    average_merc.week(1)

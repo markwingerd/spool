@@ -20,6 +20,7 @@ class Gmech:
         if hours < self.inactivity_time:
             slope = -1 * self.inactivity_drop / self.inactivity_time
             penalty = slope * hours + self.inactivity_drop
+            #print 'REDUCE --- Pool: %7i - Factor: %5.2f - Reduce: %6i' % (this_weeks_pool, penalty, round(this_weeks_pool * penalty))
             return round(this_weeks_pool * penalty)
         else:
             return 0
