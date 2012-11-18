@@ -39,7 +39,6 @@ class Merc:
                 match_points = self.gmech.get_match_points(i,self.get_history(),self.pool+self.this_weeks_pool)
                 self.points += match_points
                 self.this_weeks_pool -= match_points
-                #if self.this_weeks_pool < 0: print self.this_weeks_pool ###
                 average_points += match_points ###
             average_points /= matches_played ###
         else:
@@ -53,9 +52,9 @@ class Merc:
         self.add_history(hours_played) # History needs to be updated AFTER the week.
         self.this_weeks_pool -= self.gmech.get_point_reduction(hours_played,self.this_weeks_pool)
         self.pool += self.this_weeks_pool
-        print 'Matches played: %3i - Points gained: %10.1f - Pool left: %10.1f - Average points: %7.1f' % (matches_played, self.points, self.pool, average_points)
+        print 'Matches: %3i - Points gained: %10.1f - Pool left: %10.1f - Average points: %7.1f' % (matches_played, self.points, self.pool, average_points)
 
-
+#NEGATIVE POOL GOING TO REDUCTION. FIX
 if __name__ == '__main__':
     gmech = Gmech(weekly_pool=500000, inactivity_time=10,inactivity_drop=0.40)
     print 'Addicted Merc'

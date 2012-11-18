@@ -43,12 +43,14 @@ class TestSpool(unittest.TestCase):
 
     def test_match_points_with_history(self):
         """Tests the point distribution for merc with a history."""
-        self.assertEqual(self.gmech.get_match_points(0, 10, 400000), 5926)
-        self.assertEqual(self.gmech.get_match_points(1, 10, 394074), 5926)
-        self.assertEqual(self.gmech.get_match_points(45, 10, 133330), 5926)
-        self.assertEqual(self.gmech.get_match_points(46, 10, 127404), 5558)
-        self.assertEqual(self.gmech.get_match_points(89, 10, 29241), 1007)
-        self.assertEqual(self.gmech.get_match_points(90, 10, 28234), 1000)
+        self.assertEqual(self.gmech.get_match_points(0, 10, 500000), 16667)
+        self.assertEqual(self.gmech.get_match_points(1, 10, 483333), 16609)
+        self.assertEqual(self.gmech.get_match_points(29, 10, 51143), 13114)
+        self.assertEqual(self.gmech.get_match_points(30, 10, 38029), 12676)
+        self.assertEqual(self.gmech.get_match_points(31, 10, 25353), 6338)
+        self.assertEqual(self.gmech.get_match_points(36, 10, 9508), 1056)
+        self.assertEqual(self.gmech.get_match_points(37, 10, 7452), 1000)
+        self.assertEqual(self.gmech.get_match_points(46, 10, -548), 1000)
 
     def test_history(self):
         """Tests that a Merc history works."""

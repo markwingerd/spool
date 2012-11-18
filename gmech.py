@@ -20,7 +20,7 @@ class Gmech:
         if hours < self.inactivity_time:
             slope = -1 * self.inactivity_drop / self.inactivity_time
             penalty = slope * hours + self.inactivity_drop
-            #print 'REDUCE --- Pool: %7i - Factor: %5.2f - Reduce: %6i' % (this_weeks_pool, penalty, round(this_weeks_pool * penalty))
+            print 'REDUCE --- Pool: %7i - Factor: %5.2f - Reduce: %6i' % (this_weeks_pool, penalty, round(this_weeks_pool * penalty))
             return round(this_weeks_pool * penalty)
         else:
             return 0
@@ -41,30 +41,32 @@ class Gmech:
     def get_match_points(self, match_number, history, pool):
         """Returns the points for the match_number. Warning: Equations still 
         need to be studied."""
-        unknown=1.5 # I don't know what this does but its good.
+        slope_modifier=0.9 # Controls the degrade of SP over time. This is primarily used for the first phase of this function so the pool isn't completely consumed.
         output = 0
-        slope = 0
-        assumed_matches = history * unknown * self.matches_per_hour
+        #assumed_matches = history * 1.5 * self.matches_per_hour
+        assumed_matches = history * self.matches_per_hour #A multiplier extends the initial point value over more matches as well as lowering the point value give.
         # Within the assumed_matches, return a standard point value. Beyond
         # assumed_matches, return a deteriorating point value.
         if match_number < assumed_matches:
-            output = round(pool / (unknown*assumed_matches-match_number))
+            #output = round(pool / (1.5*assumed_matches-match_number))
+            output = round(pool / (assumed_matches-match_number*0.90)) #Attach *0.95 to match_number to get a 10% degrade.
         else:
-            points_max = round(pool/assumed_matches*2)
-            slope = -1 * ((points_max-self.points_min)/assumed_matches)
-            output = round(slope * (match_number-assumed_matches)) + points_max
+            output = round(pool / (match_number-assumed_matches*0.90))
         # Slope should not be positive. Returning min_points is sufficent.
         # If output is too low, return the minimum points gained.
-        if (slope > 0) or (output < self.points_min):
+        if output < self.points_min:
             return self.points_min
+        # Incase output is ever larger than the pool, Return half the pool. (Handles a rare error with very small histories.)
+        elif output > pool:
+            return round(pool/2)
         return output
 
 
 if __name__ == '__main__':
     # Used for testing scenerios/flow
     gmech = Gmech()
-    pool = 400000
-    for i in range(100):
-        points = gmech.get_match_points(i,10,pool)
+    pool = 548142
+    for i in range(12*2):
+        points = gmech.get_match_points(i,float(4)/3,pool)
         pool -= points
-        print '%3i - Points: %4i - Pool: %6i' % (i, points, pool)
+        print '%3i - Points: %5i - Pool: %6i' % (i, points, pool)
