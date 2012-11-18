@@ -17,6 +17,8 @@ class Gmech:
 
     def get_point_reduction(self, hours, this_weeks_pool):
         """Returns points that will be subtracted from a weekly pool."""
+        if this_weeks_pool < 0:
+            return 0
         if hours < self.inactivity_time:
             slope = -1 * self.inactivity_drop / self.inactivity_time
             penalty = slope * hours + self.inactivity_drop
