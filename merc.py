@@ -10,12 +10,15 @@ class Merc:
         self.pool = 0
         self.history = []
 
-    def get_history(self, hours):
-        """Manages merc history and returns the average hours."""
-        # Update hours. self.history must not be larger than gmech.weeks_in_history
+    def add_history(self, hours):
+        """Adds a week of hours to history."""
         self.history.append(hours)
+        # self.history must not be larger than gmech.weeks_in_history
         if len(self.history) > self.gmech.weeks_in_history:
             self.history.pop(0)
+
+    def get_history(self):
+        """Manages merc history and returns the average hours."""
         # If all of self.history is 0 then re-init self.history to [].
         # Return 0 to avoid Div by 0.
         if sum(self.history) == 0:
@@ -33,9 +36,10 @@ class Merc:
         # Get points for each match. Choose correct function based on history.
         if self.history:
             for i in range(matches_played):
-                match_points = self.gmech.get_match_points(i,hours_played,self.pool+self.this_weeks_pool)
+                match_points = self.gmech.get_match_points(i,self.get_history(),self.pool+self.this_weeks_pool)
                 self.points += match_points
                 self.this_weeks_pool -= match_points
+                #if self.this_weeks_pool < 0: print self.this_weeks_pool ###
                 average_points += match_points ###
             average_points /= matches_played ###
         else:
@@ -46,14 +50,14 @@ class Merc:
                 average_points += match_points ###
             average_points /= matches_played ###
         # Finalize the week.
-        self.get_history(hours_played)
-        self.this_weeks_pool -= self.gmech.get_point_reduction(hours_played, self.pool+self.this_weeks_pool)
+        self.add_history(hours_played) # History needs to be updated AFTER the week.
+        self.this_weeks_pool -= self.gmech.get_point_reduction(hours_played,self.this_weeks_pool)
         self.pool += self.this_weeks_pool
         print 'Matches played: %3i - Points gained: %10.1f - Pool left: %10.1f - Average points: %7.1f' % (matches_played, self.points, self.pool, average_points)
 
 
 if __name__ == '__main__':
-    gmech = Gmech(weekly_pool=500000, inactivity_time=15,inactivity_drop=0.40)
+    gmech = Gmech(weekly_pool=500000, inactivity_time=10,inactivity_drop=0.40)
     print 'Addicted Merc'
     average_merc = Merc(gmech)
     average_merc.week(28)
