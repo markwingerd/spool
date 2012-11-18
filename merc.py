@@ -56,7 +56,7 @@ class Merc:
 
 #NEGATIVE POOL GOING TO REDUCTION. FIX
 if __name__ == '__main__':
-    gmech = Gmech(weekly_pool=500000, inactivity_time=10,inactivity_drop=0.40)
+    gmech = Gmech(weekly_pool=500000, inactivity_time=5,inactivity_drop=0.40)
     print 'Addicted Merc'
     average_merc = Merc(gmech)
     average_merc.week(28)

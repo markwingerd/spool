@@ -22,7 +22,7 @@ class Gmech:
         if hours < self.inactivity_time:
             slope = -1 * self.inactivity_drop / self.inactivity_time
             penalty = slope * hours + self.inactivity_drop
-            print 'REDUCE --- Pool: %7i - Factor: %5.2f - Reduce: %6i' % (this_weeks_pool, penalty, round(this_weeks_pool * penalty))
+            #print 'REDUCE --- Pool: %7i - Factor: %5.2f - Reduce: %6i' % (this_weeks_pool, penalty, round(this_weeks_pool * penalty))
             return round(this_weeks_pool * penalty)
         else:
             return 0
@@ -57,10 +57,17 @@ class Gmech:
         # Slope should not be positive. Returning min_points is sufficent.
         # If output is too low, return the minimum points gained.
         if output < self.points_min:
+            #print 'low out'
             return self.points_min
-        # Incase output is ever larger than the pool, Return half the pool. (Handles a rare error with very small histories.)
+        # fdsfds
+        elif output*self.inactivity_time*self.matches_per_hour > self.weekly_pool:
+            #print 'SERIOUSLY'
+            return round(self.weekly_pool / (self.inactivity_time*self.matches_per_hour))
+         # Incase output is ever larger than the pool, Return half the pool. (Handles a rare error with very small histories.)
         elif output > pool:
+            #print 'round(pool/2)', round(pool/2)
             return round(pool/2)
+        #print 'Normal: ', output
         return output
 
 
