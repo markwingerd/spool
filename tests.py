@@ -17,7 +17,7 @@ class TestSpool(unittest.TestCase):
         self.assertEqual(self.gmech.inactivity_time,5)
         self.assertEqual(self.gmech.inactivity_drop,0.20)
         self.assertEqual(self.gmech.points_min,1000)
-        self.assertEqual(self.gmech.max_matches,100)
+        self.assertEqual(self.gmech.default_matches,100)
         self.assertEqual(self.gmech.weeks_in_history,3)
 
     def test_merc_init(self):
