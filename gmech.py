@@ -2,9 +2,9 @@ import math
 
 class Gmech:
     """"""
-    def __init__(self, weekly_pool=300000, matches_per_hour=3,
-                 inactivity_time=5, inactivity_drop=0.20, points_min=1000,
-                 default_matches=100, weeks_in_history=3):
+    def __init__(self, weekly_pool=500000, matches_per_hour=3,
+                 inactivity_time=10, inactivity_drop=0.40, weeks_in_history=3, 
+                 points_min=1000, default_matches=100):
         """Init for all Gmech variables."""
         self.weekly_pool = weekly_pool
         self.matches_per_hour = matches_per_hour
@@ -76,9 +76,9 @@ class Gmech:
 
 if __name__ == '__main__':
     # Used for testing scenerios/flow
-    gmech = Gmech()
-    pool = 500000
-    for i in range(60):
-        points = gmech.get_match_points(i,10,pool)
+    gmech = Gmech(weekly_pool=500000, inactivity_time=5,inactivity_drop=0.40)
+    poolAd = 500000
+    for i in range(30):
+        points = gmech.get_match_points(i,11,pool)
         pool -= points
-        print '%3i - Points: %5i - Pool: %6i' % (i, points, pool)
+        print 'Match#: %3i - Points Earned: %5i' % (i, points)
